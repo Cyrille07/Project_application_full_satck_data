@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from routers import users, blogposts
-from . import models, database
+import models, database
 
 
 
