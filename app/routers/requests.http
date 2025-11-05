@@ -1,0 +1,7 @@
+### Remplissage de la database
+POST http://localhost:5001/users
+Content-Type: application/json
+
+{"first_name": "Othnie" , "last_name":"Effi" , "email": "othniel@gmail.com"}
+
+

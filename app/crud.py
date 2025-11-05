@@ -22,3 +22,4 @@ def create_blogpost(db: Session, post: schemas.BlogPostCreate, user_id: int):
 
 def get_blogposts(db: Session):
     return db.query(models.BlogPost).all()
+
