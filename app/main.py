@@ -9,6 +9,10 @@ models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
+app.include_router(users.router)
+app.include_router(blogposts.router)
+
+
 # ✅ Crée les tables après que la base soit prête
 @app.on_event("startup")
 def startup_event():
@@ -23,5 +27,3 @@ def startup_event():
     print("✅ Base initialisée avec succès !")
 
 
-app.include_router(users.router)
-app.include_router(blogposts.router)

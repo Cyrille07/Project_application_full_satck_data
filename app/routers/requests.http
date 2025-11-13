@@ -2,6 +2,19 @@
 POST http://localhost:5001/users
 Content-Type: application/json
 
-{"first_name": "Othnie" , "last_name":"Effi" , "email": "othniel@gmail.com"}
+{"first_name": "Franck" , "last_name":"Nguimkeu" , "email": "frack@gmail.com" }
 
+
+### Test de requete post pour Créer des blogPOst
+POST http://localhost:5001/posts/
+Content-Type: application/json
+
+{"title":"livre d'essai","content":"voyons si ça marche"}
+
+
+### Test de requete PUT pour update des blogPOst
+PUT http://localhost:5001/posts/
+Content-Type: application/json
+
+{"title":"Les 1000 histoires du duc Picsou","content":"Donald rembourse enfin sa dette!"}
 
