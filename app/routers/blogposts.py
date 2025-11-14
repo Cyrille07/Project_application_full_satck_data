@@ -15,3 +15,7 @@ def read_posts(db: Session = Depends(database.get_db)):
 @router.put("/", response_model=schemas.BlogPost)
 def update_post_by_user(post: schemas.BlogPostCreate, db: Session = Depends(database.get_db)):
     return crud.update_blogpost(db, post, post_id=2, user_id=2)
+
+@router.get("/{id}", response_model=list[schemas.BlogPost])
+def read_specific_post(id: int, db: Session = Depends(database.get_db) ):
+    return crud.get_blogposts_specific(id,db)

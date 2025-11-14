@@ -2,14 +2,14 @@
 POST http://localhost:5001/users
 Content-Type: application/json
 
-{"first_name": "Franck" , "last_name":"Nguimkeu" , "email": "frack@gmail.com" }
+{"first_name": "Franck" , "last_name":"Nguimkeu" , "email": "franck@gmail.com" }
 
 
 ### Test de requete post pour Créer des blogPOst
 POST http://localhost:5001/posts/
 Content-Type: application/json
 
-{"title":"livre d'essai","content":"voyons si ça marche"}
+{"title":"livre d'essai_3","content":"voyons si ça marche"}
 
 
 ### Test de requete PUT pour update des blogPOst
@@ -18,3 +18,9 @@ Content-Type: application/json
 
 {"title":"Les 1000 histoires du duc Picsou","content":"Donald rembourse enfin sa dette!"}
 
+
+### Test Création d'un commentaire
+POST http://localhost:5001/commentspost/
+Content-Type: application/json
+
+{"content":"T'es rentré dans les bails de philo mdr"}

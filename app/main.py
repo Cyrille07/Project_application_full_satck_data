@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import users, blogposts
+from routers import users, blogposts, commentspost
 import models, database
 import fill_database
 
@@ -11,6 +11,8 @@ app = FastAPI()
 
 app.include_router(users.router)
 app.include_router(blogposts.router)
+app.include_router(commentspost.router)
+
 
 
 # ✅ Crée les tables après que la base soit prête
