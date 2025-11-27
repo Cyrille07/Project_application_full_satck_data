@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import models
 import serializers
-from exceptions.employee import EmployeeNotFound
+from exceptions.employee import EmployeeNotFound, IncorrectRole
 from services_crud.auth import hash_password
 
 
@@ -20,7 +20,7 @@ def create_employee(db: Session, employee: serializers.EmployeeCreate) -> models
         raise  HTTPException(status_code=401, detail ="Employee with this name already exist")
 
     if employee.role not in authorized_role:
-        raise  HTTPException(status_code=401, detail="Role not defined, you should choose between : [Cashier, Server, cook, Chief_of_resto]") 
+        raise  HTTPException(status_code=401, detail="Role not defined, you should choose between : [Cashier, Server, Cook, Chief_of_resto]") 
     
     new_db_employee = models.Employee(name=employee.name, password=hash_password(employee.password), role=employee.role )
 
@@ -45,7 +45,7 @@ def get_employee_by_id(employee_id: str, db: Session) -> models.Employee:
 
 
 #Get tous les employés de la db
-def get_all_employees(db: Session, skip: int = 0, limit: int = 10) -> list[models.Employee]:
+def get_all_employees(db: Session, skip: int = 0, limit: int = 15) -> list[models.Employee]:
     records = db.query(models.Employee).offset(skip).limit(limit).all()
     for record in records:
         record.id = str(record.id)
@@ -57,6 +57,11 @@ def get_all_employees(db: Session, skip: int = 0, limit: int = 10) -> list[model
 def update_employee(employee_id: str, db: Session, employee: serializers.EmployeeCreate) -> models.Employee:
     db_employee = get_employee_by_id(employee_id, db) #peut raise employeenotfound
 
+    #Check le name / les noms sont uniques dans la DB
+    if db.query(models.Employee).filter(models.Employee.name == employee.name).first() :
+        raise  HTTPException(status_code=401, detail="User with this name already exist")
+
+    #Check le role 
     authorized_role = ["Cashier", "Server", "Cook", "Chief_of_resto"]
     if employee.role not in authorized_role:
         raise  HTTPException(status_code=401, detail="Role not defined, you should choose between : [Cashier, Server, cook, Chief_of_resto]") 
@@ -74,7 +79,6 @@ def update_employee(employee_id: str, db: Session, employee: serializers.Employe
 
 #Un employé qui a donné des taches ou reçues des taches ne peut PAS être supprimé
 #Il faut que les champs tasks_written et tasks_received soient VIDES
-
 def delete_employee_by_id(employee_id: str, db: Session) -> models.Employee:
     db_employee = get_employee_by_id(employee_id, db=db)
     
@@ -93,9 +97,21 @@ def delete_employee_by_id(employee_id: str, db: Session) -> models.Employee:
     return db_employee
 
 
-def delete_all_employees(db: Session) -> list[models.Employee]:
+
+# Seul le chef du resto peut effectuer cette opération
+def delete_all_employees(employee_id: str, db: Session) -> list[models.Employee]:
+    # Récupérer l'employé à partir de son ID, peut lever une exception EmployeeNotFound
+    db_employee = get_employee_by_id(employee_id, db)
+    
+    if db_employee.role != "Chief_of_resto":
+        raise IncorrectRole()
+
+    # Supprimer tous les employés sauf le chef
     records = db.query(models.Employee).all()  
     for record in records:
-        delete_employee_by_id(record.id, db=db)
+        # vérification supplémentaire ici pour ne pas supprimer le chef
+        if record.id != employee_id:
+            delete_employee_by_id(record.id, db=db)
+
     db.commit()
     return records

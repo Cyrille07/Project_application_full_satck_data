@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 from routers.auth import auth_router
 from routers.task import task_router
@@ -23,6 +24,14 @@ app = FastAPI(
     description="My description",
     version="0.0.1",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permet toutes les origines. Pour la production, précise les URLs de ton frontend.
+    allow_credentials=True,
+    allow_methods=["*"],  # Permet toutes les méthodes HTTP
+    allow_headers=["*"],  # Permet tous les headers
 )
 
 bearer_scheme = HTTPBearer()

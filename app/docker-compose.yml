@@ -31,6 +31,34 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  tests:
+    build: ./frontend
+    volumes:
+      - ./:/app
+    command: ["pytest", "tests/", "-v", "--color=yes", "--cov=.", "--cov-report=term-missing", "--cov-report=html"]
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - .env.test
+  
+
+  frontend:
+    container_name: frontend_container
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"     # ← Le bon port !
+    depends_on:
+      - app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host"]
+
+
       
 volumes:
   postgres_data_auth:

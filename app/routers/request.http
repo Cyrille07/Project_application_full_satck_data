@@ -12,6 +12,13 @@ Content-Type: application/json
 { "name": "Toscane", "password": "Toscane", "role":"Server" }
 
 
+### Envoyer une requete POST pour créer un employee
+POST  http://localhost:5001/employees/
+Content-Type: application/json
+
+{ "name": "Cyrille", "password": "Cyrille", "role":"Chief_of_resto" }
+
+
 ### Envoyer une requete POST pour créer une TASK
 POST  http://localhost:5001/tasks/
 Content-Type: application/json
@@ -26,10 +33,10 @@ Content-Type: application/json
 
 ### Update employee
 PUT  http://localhost:5001/employees/updateme/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6IjM3YzQ1NjVkLWM2MTItNDljYi05MWYwLWJjZjY0N2FiOGMzZiIsImV4cCI6MTc2MzU2NDQ2MX0.VOaFnjP4y5bxf76vio9XP5EPs2BZDZSI5-DfwrlG3ao
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6Ijk1MzYzZDgxLWE4MzYtNGFjMi1hNzQyLTY3OTIyODNlODM0ZCIsImV4cCI6MTc2NDE4NzUyOH0.vZYC5gkXJmk7L7swqXr1p8gt8saZjYAXj2Mgw3mCIeg
 Content-Type: application/json
 
-{"name": "Joseph4" , "password": "Joseph4", "role":"Cook" }
+{"name": "Joseph" , "password": "Joseph", "role":"Cook" }
 
 
 
@@ -37,7 +44,7 @@ Content-Type: application/json
 POST http://localhost:5001/auth/token/
 Content-Type: application/json
 
-{"name": "Joseph4" , "password": "Joseph4", "role":"Cook" }
+{ "name": "Joseph", "password": "Joseph", "role":"Cashier" }
 
 
 
