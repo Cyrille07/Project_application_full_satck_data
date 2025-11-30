@@ -1,0 +1,12 @@
+fastapi[all]
+pydantic
+uvicorn
+psycopg2
+pyjwt
+sqlalchemy 
+alembic 
+python-dotenv
+pytest
+pytest-asyncio
+pytest-cov
+httpx
