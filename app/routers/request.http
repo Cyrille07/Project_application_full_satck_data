@@ -1,0 +1,50 @@
+### Envoyer une requete POST pour créer un employee
+POST  http://localhost:5001/employees/
+Content-Type: application/json
+
+{ "name": "Joseph", "password": "Joseph", "role":"Cashier" }
+
+
+### Envoyer une requete POST pour créer un employee
+POST  http://localhost:5001/employees/
+Content-Type: application/json
+
+{ "name": "Toscane", "password": "Toscane", "role":"Server" }
+
+
+### Envoyer une requete POST pour créer un employee
+POST  http://localhost:5001/employees/
+Content-Type: application/json
+
+{ "name": "Cyrille", "password": "Cyrille", "role":"Chief_of_resto" }
+
+
+### Envoyer une requete POST pour créer une TASK
+POST  http://localhost:5001/tasks/
+Content-Type: application/json
+
+{   "title": "Servir table",
+    "content": "Servir table 3 ",
+    "author_id": "37c4565d-c612-49cb-91f0-bcf647ab8c3f",
+    "recipient_id": "30b9a37a-8d0d-45cc-ab5c-70ec975a7cc6" }
+
+
+
+
+### Update employee
+PUT  http://localhost:5001/employees/updateme/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6Ijk1MzYzZDgxLWE4MzYtNGFjMi1hNzQyLTY3OTIyODNlODM0ZCIsImV4cCI6MTc2NDE4NzUyOH0.vZYC5gkXJmk7L7swqXr1p8gt8saZjYAXj2Mgw3mCIeg
+Content-Type: application/json
+
+{"name": "Joseph" , "password": "Joseph", "role":"Cook" }
+
+
+
+### Créer token
+POST http://localhost:5001/auth/token/
+Content-Type: application/json
+
+{ "name": "Joseph", "password": "Joseph", "role":"Cashier" }
+
+
+
