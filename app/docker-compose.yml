@@ -32,8 +32,10 @@ services:
       timeout: 5s
       retries: 5
 
+
   tests:
-    build: ./frontend
+    container_name: test_container
+    build: .
     volumes:
       - ./:/app
     command: ["pytest", "tests/", "-v", "--color=yes", "--cov=.", "--cov-report=term-missing", "--cov-report=html"]
@@ -42,24 +44,24 @@ services:
         condition: service_healthy
     env_file:
       - .env.test
+    
   
-
   frontend:
     container_name: frontend_container
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"     # ← Le bon port !
-    depends_on:
-      - app
+      - "5173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: ["npm", "run", "dev", "--", "--host"]
+    environment:
+      - VUE_APP_API_URL=http://app:5001
+    depends_on:
+      - app
 
-
-      
+   
 volumes:
   postgres_data_auth:
     

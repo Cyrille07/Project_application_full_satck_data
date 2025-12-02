@@ -5,6 +5,7 @@ Content-Type: application/json
 { "name": "Joseph", "password": "Joseph", "role":"Cashier" }
 
 
+
 ### Envoyer une requete POST pour créer un employee
 POST  http://localhost:5001/employees/
 Content-Type: application/json
@@ -17,6 +18,20 @@ POST  http://localhost:5001/employees/
 Content-Type: application/json
 
 { "name": "Cyrille", "password": "Cyrille", "role":"Chief_of_resto" }
+
+
+### Requete GET pour recevoir tous les employees GetALLEmployee
+GET   http://localhost:5001/employees/
+Content-Type: application/json
+
+### Requete GET pour recevoir tous les employees GetEmployebyId
+GET   http://localhost:5001/employees/d8cfbc6c-818d-49e4-8eaf-8a54a7e61999
+Content-Type: application/json
+
+
+### Requete pour SUPPRIMER tous les employees , uniquement par le chef_of_resto
+DELETE  http://localhost:5001/employees/delete_all/eb64efe3-4708-4bbc-bcc1-a8d686cb40e5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6ImViNjRlZmUzLTQ3MDgtNGJiYy1iY2MxLWE4ZDY4NmNiNDBlNSIsImV4cCI6MTc2NDUwOTIxMH0.vtOA5zoe4N7jqxODHga-bEcYf7XhryaXI6zO7Bsj6vY
 
 
 ### Envoyer une requete POST pour créer une TASK
@@ -33,10 +48,10 @@ Content-Type: application/json
 
 ### Update employee
 PUT  http://localhost:5001/employees/updateme/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6Ijk1MzYzZDgxLWE4MzYtNGFjMi1hNzQyLTY3OTIyODNlODM0ZCIsImV4cCI6MTc2NDE4NzUyOH0.vZYC5gkXJmk7L7swqXr1p8gt8saZjYAXj2Mgw3mCIeg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6ImFlZjdhYjIxLTI5MDUtNGI4MC1iNmMzLWQ5ZWZkNjEzMzRhYyIsImV4cCI6MTc2NDUxNTc1MX0.R1hyP8MRRNjOrE6-s7HT0X8ttshfKiNCtJiEeHoJKIc
 Content-Type: application/json
 
-{"name": "Joseph" , "password": "Joseph", "role":"Cook" }
+{"name": "Joseph_update3" , "password": "Joseph_update3", "role":"Cook" }
 
 
 
