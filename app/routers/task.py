@@ -5,8 +5,7 @@ import database
 from fastapi import APIRouter, Depends, HTTPException
 from routers import utils
 from exceptions.task import TaskNotFound, TaskAlreadyExists, WrongAuthor
-from exceptions.employee import EmployeeNotFound
-from routers.utils import get_employee_id
+from exceptions.employee import EmployeeNotFound, IncorrectRole
 from serializers.task import TaskOutput
 from services_crud import task as task_service
 from sqlalchemy.orm import Session
@@ -36,47 +35,80 @@ async def get_all_tasks(db: Session = Depends(database.get_db)):
 
 
 # -----------------------------------------
-# DELETE A SPECIFIC TASK (only author )
+# GET TASK by id
 # -----------------------------------------
-@task_router.delete("/{task_id}", tags=["tasks"])
-async def delete_task_by_id(task_id: str, db: Session = Depends(database.get_db), employee_id: str = Depends(get_employee_id) ):
+@task_router.get("/{task_id}", tags=["tasks"], response_model=TaskOutput)
+async def get_task_by_id(task_id: str, db: Session = Depends(database.get_db) ):
     try:
-        return task_service.get_task_by_id(task_id=task_id, db=db, employee_id=employee_id)
+        task = task_service.get_task_by_id(task_id=task_id, db=db)
+        return task
+    except TaskNotFound:
+        raise HTTPException(status_code=404, detail="Tasks not found")
+
+
+
+# -----------------------------------------
+# GET TASK BY AUTHOR id
+# -----------------------------------------
+@task_router.get("/taskauthor/{author_id}", tags=["tasks"], response_model=list[TaskOutput])
+async def get_task_by_author_id(author_id: str, db: Session = Depends(database.get_db) ):
+    try:
+        return task_service.get_tasks_by_author_id(author_id=author_id, db=db)
+    except EmployeeNotFound:
+        raise HTTPException(status_code=404, detail="Employee id not found")
+    except TaskNotFound:
+        raise HTTPException(status_code=404, detail="Has no written Tasks")
+
+
+# -----------------------------------------
+# GET TASK BY RECIPIENT id
+# -----------------------------------------
+@task_router.get("/taskrecipient/{recipient_id}", tags=["tasks"], response_model=list[TaskOutput])
+async def get_task_by_recipient_id(recipient_id: str, db: Session = Depends(database.get_db) ):
+    try:
+        return task_service.get_tasks_by_recipient_id(recipient_id=recipient_id, db=db)
+    except EmployeeNotFound:
+        raise HTTPException(status_code=404, detail="Employee id not found")
+    except TaskNotFound:
+        raise HTTPException(status_code=404, detail="Has not received Tasks")
+    
+
+
+
+# -----------------------------------------
+# DELETE A SPECIFIC TASK 
+# -----------------------------------------
+@task_router.delete("/deltask/{task_id}", tags=["tasks"])
+async def delete_task_by_id(task_id: str, db: Session = Depends(database.get_db)):
+    try:
+        return task_service.delete_task(task_id=task_id, db=db)
     except TaskNotFound:
         raise HTTPException(status_code=404, detail="Task not found")
-    except WrongAuthor:
-        raise HTTPException(status_code=403, detail="Only the author can delete this task")
-
 
 
 
 # -----------------------------------------
 # DELETE ALL TASKS
 # -----------------------------------------
-#only the chief of resto
-@task_router.delete("/", tags=["tasks"])
-async def delete_all_tasks(db: Session = Depends(database.get_db)):
-    return task_service.delete_all_tasks(db=db)
+
+@task_router.delete("/deletealltask/{employee_id}",dependencies=[Depends(security)], tags=["tasks"])
+async def delete_all_tasks(employee_id: str = Depends(utils.get_employee_id), db: Session = Depends(database.get_db)):
+    try:
+        return task_service.delete_all_tasks(employee_id=employee_id, db=db)
+    except EmployeeNotFound:
+        raise HTTPException(status_code=404, detail="Employee Not Found")
+    except IncorrectRole:
+        raise HTTPException(status_code=404, detail="Incorrect Role, Only the Chief of the resto can delete all the tasks")
+
+
+
+
 
 
 
 # -----------------------------------------
-# GET ONE TASK by id
-# -----------------------------------------
-security = HTTPBearer()
-
-@task_router.get("/{task_id}", tags=["tasks"], response_model=TaskOutput)
-async def get_task_by_id(task_id: str, db: Session = Depends(database.get_db) ):
-    # Récupérer la tâche
-    task = task_service.get_task_by_id(task_id=task_id, db=db)
-
-    return task
-
-
-
-
 #UPDATE TASK
-
+# -----------------------------------------
 @task_router.put("/update_task_by_author_id", dependencies=[Depends(security)], tags=["tasks"], response_model=TaskOutput)
 async def udpdate_task_by_author_id(
     task_update: serializers.TaskCreate,

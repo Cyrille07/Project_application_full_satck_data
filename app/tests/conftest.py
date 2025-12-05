@@ -66,6 +66,11 @@ def test_employee_name():
     """Fixture pour le nom d'utilisateur de test"""
     return "testname"
 
+@pytest.fixture(scope="session")
+def test_role():
+    """Fixture pour le rôle par défaut"""
+    return "Cashier"
+
 
 @pytest.fixture(scope="function")
 def test_employee(test_db_session, test_employee_password, test_employee_name, test_role):

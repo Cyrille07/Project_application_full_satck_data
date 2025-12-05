@@ -40,15 +40,14 @@ Content-Type: application/json
 
 {   "title": "Servir table",
     "content": "Servir table 3 ",
-    "author_id": "37c4565d-c612-49cb-91f0-bcf647ab8c3f",
-    "recipient_id": "30b9a37a-8d0d-45cc-ab5c-70ec975a7cc6" }
-
+    "author_id": "eb64efe3-4708-4bbc-bcc1-a8d686cb40e5",
+    "recipient_id": "fcd2dac9-ad84-4408-a97c-d96ffde30b99" }
 
 
 
 ### Update employee
 PUT  http://localhost:5001/employees/updateme/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6ImFlZjdhYjIxLTI5MDUtNGI4MC1iNmMzLWQ5ZWZkNjEzMzRhYyIsImV4cCI6MTc2NDUxNTc1MX0.R1hyP8MRRNjOrE6-s7HT0X8ttshfKiNCtJiEeHoJKIc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6ImZjZDJkYWM5LWFkODQtNDQwOC1hOTdjLWQ5NmZmZGUzMGI5OSIsImV4cCI6MTc2NDcxNTIyMH0.ZXUusj_U9eQb25UBP7FiAcpPYFYMm8zOA8iN35U-gBo
 Content-Type: application/json
 
 {"name": "Joseph_update3" , "password": "Joseph_update3", "role":"Cook" }
@@ -60,6 +59,26 @@ POST http://localhost:5001/auth/token/
 Content-Type: application/json
 
 { "name": "Joseph", "password": "Joseph", "role":"Cashier" }
+
+
+### DEL A TASK
+DELETE  http://localhost:5001/tasks/deltask/c826bc94-6978-40a9-8c5a-3492d53ca6f3
+Content-Type: application/json
+
+
+### GET TASKS by recipient id
+GET   http://localhost:5001/tasks/taskrecipient/fcd2dac9-ad84-4408-a97c-d96ffde30b99
+Content-Type: application/json
+
+
+### Requete pour SUPPRIMER toutes les tasks , uniquement par le chef_of_resto
+DELETE  http://localhost:5001/tasks/deletealltask/fcd2dac9-ad84-4408-a97c-d96ffde30b99
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBsb3llZV9pZCI6ImViNjRlZmUzLTQ3MDgtNGJiYy1iY2MxLWE4ZDY4NmNiNDBlNSIsImV4cCI6MTc2NDc0MDE2MX0.TB-T3_Y2DdfpFU9Ul5ZmXH4a0wDcgnnywxCGNDG1Dxc
+
+
+
+
+
 
 
 

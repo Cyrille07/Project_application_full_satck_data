@@ -8,9 +8,10 @@ import serializers
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from exceptions.employee import EmployeeNotFound
+from exceptions.employee import EmployeeNotFound, IncorrectRole
 from services_crud import employee as employee_service
 from exceptions.task import TaskNotFound, TaskAlreadyExists, WrongAuthor
+
 
 
 
@@ -72,6 +73,7 @@ def get_task_by_id(task_id: str, db: Session) -> models.Task:
 
 
 def get_tasks_by_author_id(author_id: str, db: Session) -> list[models.Task]:
+    employee_service.get_employee_by_id(employee_id=author_id, db=db) #peut raise EmployeeNotFound
     records = db.query(models.Task).filter(models.Task.author_id == author_id).all()
     if not records:
         raise TaskNotFound
@@ -81,6 +83,7 @@ def get_tasks_by_author_id(author_id: str, db: Session) -> list[models.Task]:
 
 
 def get_tasks_by_recipient_id(recipient_id: str, db: Session) -> list[models.Task]:
+    employee_service.get_employee_by_id(employee_id=recipient_id, db=db) #peut raise EmployeeNotFound
     records = db.query(models.Task).filter(models.Task.recipient_id == recipient_id).all()
     if not records:
         raise TaskNotFound
@@ -123,7 +126,7 @@ def update_task_by_author_id(task_id: str, author_id: str, task_update: serializ
 #Uniquement le chief of resto pourra tout supprimer
 
 def delete_task(task_id: str, db: Session) -> models.Task:
-    db_task = get_task_by_id(task_id=task_id, db=db)
+    db_task = get_task_by_id(task_id=task_id, db=db) #peut raise TaskNotFound
     db.delete(db_task)
     db.commit()
     return db_task
@@ -140,7 +143,12 @@ def delete_task_by_author(task_id: str, db: Session, author_id: str) -> models.T
     return db_task
 
 
-def delete_all_tasks(db: Session) -> list[models.Task]:
+def delete_all_tasks(employee_id: str, db: Session) -> list[models.Task]:
+    employee_db=employee_service.get_employee_by_id(employee_id=employee_id, db=db) # peut raise employeeNotFound
+
+    if employee_db.role !="Chief_of_resto":
+        raise IncorrectRole
+    
     records = db.query(models.Task).all()
     for r in records:
         db.delete(r)

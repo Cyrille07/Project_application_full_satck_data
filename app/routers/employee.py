@@ -18,7 +18,10 @@ async def create_employee(
     employee: serializers.EmployeeCreate,
     db: Session = Depends(database.get_db)
 ):
-    return employee_service.create_employee(db=db, employee=employee)
+    try:
+        return employee_service.create_employee(db=db, employee=employee)
+    except IncorrectRole:
+        raise HTTPException(status_code=401, detail="Role not defined, you should choose between : [Cashier, Server, Cook, Chief_of_resto]") 
 
 
 

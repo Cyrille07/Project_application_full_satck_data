@@ -98,11 +98,10 @@
     </div>
   </div>
 
-
-
-
-
 </template>
+
+
+
 
 <script setup>
 import { ref } from "vue";
@@ -328,7 +327,7 @@ const updateEmployeeByToken = async () => {
   responses_update.value.update = "⏳ Envoi de la requête de mise à jour...";
 
   try {
-    const res = await axios.put(`${API_URL}/employees/updateme`, updateData.value, {
+    const res = await axios.put(`${API_URL}/updateme`, updateData.value, {
       headers: {
         Authorization: `Bearer ${localToken}`,
         "Content-Type": "application/json",

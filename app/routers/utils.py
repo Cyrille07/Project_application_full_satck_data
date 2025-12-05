@@ -1,8 +1,12 @@
 from typing import Union
 
 from fastapi import Header, HTTPException
+from fastapi.security import HTTPBearer
 
 from services_crud.auth import decode_jwt
+
+
+security = HTTPBearer()
 
 """
 async def verify_authorization_header(

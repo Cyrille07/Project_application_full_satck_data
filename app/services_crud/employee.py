@@ -20,7 +20,7 @@ def create_employee(db: Session, employee: serializers.EmployeeCreate) -> models
         raise  HTTPException(status_code=401, detail ="Employee with this name already exist")
 
     if employee.role not in authorized_role:
-        raise  HTTPException(status_code=401, detail="Role not defined, you should choose between : [Cashier, Server, Cook, Chief_of_resto]") 
+        raise IncorrectRole 
     
     new_db_employee = models.Employee(name=employee.name, password=hash_password(employee.password), role=employee.role )
 
@@ -56,9 +56,12 @@ def get_all_employees(db: Session, skip: int = 0, limit: int = 20) -> list[model
 def update_employee(employee_id: str, db: Session, employee_update: serializers.EmployeeCreate) -> models.Employee:
     db_employee = get_employee_by_id(employee_id, db) #peut raise employeenotfound
 
-    #Check le name / les noms sont uniques dans la DB
-    if db.query(models.Employee).filter(models.Employee.name == employee_update.name).first() :
-        raise  HTTPException(status_code=401, detail="User with this name already exist")
+    # On cherche s'il existe DÉJÀ un employé avec ce nom...
+    existing_user = db.query(models.Employee).filter(models.Employee.name == employee_update.name).first()
+
+    # ... S'il existe ET que son ID n'est pas le mien, alors c'est un doublon interdit.
+    if existing_user and str(existing_user.id) != str(employee_id):
+        raise HTTPException(status_code=401, detail="User with this name already exist")
 
     #Check le role 
     authorized_role = ["Cashier", "Server", "Cook", "Chief_of_resto"]
@@ -72,7 +75,6 @@ def update_employee(employee_id: str, db: Session, employee_update: serializers.
     db.commit()
     db.refresh(db_employee)
     return db_employee
-
 
 
 #----------------------------  DELETE ----------------------------------
@@ -103,7 +105,7 @@ def delete_all_employees(employee_id: str, db: Session) -> list[models.Employee]
     db_employee = get_employee_by_id(employee_id, db)
     
     if db_employee.role != "Chief_of_resto":
-        raise IncorrectRole()
+        raise IncorrectRole
 
     # Supprimer tous les employés sauf le chef
     records = db.query(models.Employee).all()  
