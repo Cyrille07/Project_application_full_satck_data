@@ -79,7 +79,7 @@ Pour lancer le projet, suivez ces étapes :
 
 2. Lancer le projet avec  la commande :
     ```bash
-    docker-compose up
+    docker-compose up --build
     ```
 
 3. Accédez aux différentes interfaces <br>
