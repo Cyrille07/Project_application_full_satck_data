@@ -59,7 +59,7 @@ def test_create_employee_duplicate_name_raises_exception(test_db_session):
 def test_create_employee_incorrect_role_raises_exception(test_db_session):
     """Teste la levée de l'exception IncorrectRole si le rôle n'est pas autorisé."""   
     employee_data = serializers.EmployeeCreate(name="John_Doe", password="pass", role="Juggler") # Rôle non autorisé
-    # On s'attend à ce que l'exception métier IncorrectRole soit levée
+    # On s'attend à ce que l'exception IncorrectRole soit levée
     with pytest.raises(IncorrectRole):
         create_employee(db=test_db_session, employee=employee_data)
 
@@ -175,7 +175,7 @@ def test_delete_employee_with_tasks_fails(test_db_session, mocker):
 
     # 2. Mocking : On intercepte get_employee_by_id pour renvoyer un objet modifié
     # On crée un faux objet qui ressemble à l'employé mais avec une liste de tâches non vide
-    mock_employee = mocker.Mock(wraps=emp) # wraps=emp permet de garder les autres attributs réels
+    mock_employee = mocker.Mock(wraps=emp) 
     mock_employee.tasks_written = ["Task1"] # On simule une tâche
     mock_employee.tasks_received = []
     
