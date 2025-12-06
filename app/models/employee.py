@@ -14,5 +14,4 @@ class Employee(BaseSQL):
 
     # relations
     tasks_written = relationship("Task",back_populates="author",foreign_keys="Task.author_id")
-
     tasks_received = relationship("Task", back_populates="recipient",foreign_keys="Task.recipient_id")
