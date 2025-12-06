@@ -151,22 +151,20 @@ La base de données est organisée en deux tables principales : **Employee** et 
   <img src="app/assets/table_dtb.png" alt="Structure de la base de données" width="70%">
 </p>
 
----
+
 #### Table **Employee**
 Chaque employé est unique — il ne peut donc pas y avoir de doublon.  
 - L’**ID** est encodé sous forme de **UUID**.  
 - Le **mot de passe** est issu d’une fonction de **hachage**, garantissant sa sécurité.  
 - Un employé peut **modifier son mot de passe** après authentification.  
 - Le **rôle** de chaque utilisateur est défini à la création du compte et peut être modifié près authentification
-
 Les rôles disponibles sont :
 - **Chief_of_the_resto** → super utilisateur (accès administrateur)  
 - **Server** → serveur  
 - **Cook** → cuisinier  
 - **Cashier** → caissier  
----
-#### Table **Task**
 
+#### Table **Task**
 Cette table représente les **tâches attribuées aux employés**.  
 Chaque enregistrement contient :
 - le **titre** de la tâche,  
@@ -175,7 +173,7 @@ Chaque enregistrement contient :
 - deux **clés étrangères** :
   - l’employé **créateur** de la tâche,  
   - et l’employé **assigné** à cette tâche.
----
+
 
 Cette double relation entre les tables est essentielle : elle permet d’identifier à la fois **qui a créé** la tâche et **qui doit l’exécuter**, assurant ainsi une traçabilité complète.
 
@@ -220,7 +218,6 @@ Les informations de connexion sont définies dans le fichier **`.env`** sous for
    - Une **nouvelle session** est créée pour chaque requête.  
    - La **fermeture automatique** de la session est assurée par un bloc `finally`.  
    - Ce mécanisme facilite l’**injection de dépendance** dans les routes FastAPI.
-
 
 
 En résumé, ce module garantit une connexion fiable, sécurisée et adaptable à tout environnement d’exécution, tout en assurant une gestion optimale des sessions et des transactions.
