@@ -433,10 +433,20 @@ const deleteTaskById = async () => {
 const chiefIdForTaskDelete = ref("");
 const response_delete_all_tasks = ref({ message: "" });
 
+// Decode un JWT et renvoie le payload JSON
+function decodeTokenPayload(token) {
+  try {
+    const payload = token.split(".")[1];
+    return JSON.parse(atob(payload));
+  } catch {
+    return null;
+  }
+}
+
+
 const deleteAllTasks = async () => {
   response_delete_all_tasks.value.message = "⏳ Vérification du token...";
 
-  // Token stocké en local (unique source d'identité)
   const localToken = localStorage.getItem("access_token");
 
   if (!localToken) {
@@ -445,19 +455,32 @@ const deleteAllTasks = async () => {
     return;
   }
 
-  // Vérifier que l'utilisateur a entré l'ID correspondant au token
-  if (!chiefIdForTaskDelete.value.trim()) {
+  // Décodage du payload du JWT
+  const payload = decodeTokenPayload(localToken);
+
+  if (!payload || !payload.employee_id) {
     response_delete_all_tasks.value.message =
-      "❌ Veuillez saisir votre ID avant de supprimer toutes les tâches.";
+      "❌ Token invalide — impossible d'extraire votre identité.";
     return;
   }
 
+  const idFromToken = payload.employee_id.trim();
+  const idEntered = chiefIdForTaskDelete.value.trim();
+
+  // COMPARAISON OBLIGATOIRE
+  if (idEntered !== idFromToken) {
+    response_delete_all_tasks.value.message =
+      "❌ L'ID saisi ne correspond pas à votre identité. Action interdite.";
+    return;
+  }
+
+  // Si l'ID correspond → on peut supprimer
   response_delete_all_tasks.value.message =
     "⏳ Suppression de toutes les tâches...";
 
   try {
     const res = await axios.delete(
-      `${TASKS_API_URL}/deletealltask/${chiefIdForTaskDelete.value}`,
+      `${TASKS_API_URL}/deletealltask/${idEntered}`,
       {
         headers: {
           Authorization: `Bearer ${localToken}`,
@@ -466,12 +489,8 @@ const deleteAllTasks = async () => {
       }
     );
 
-    // Succès
-    response_delete_all_tasks.value.message = `✅ Toutes les tâches ont été supprimées.\nTâches retournées:\n${JSON.stringify(
-      res.data,
-      null,
-      2
-    )}`;
+    response_delete_all_tasks.value.message = `✅ Toutes les tâches ont été supprimées.\n${JSON.stringify(res.data, null, 2)}`;
+
   } catch (err) {
     console.error("Erreur API (delete all tasks):", err);
 
@@ -481,15 +500,18 @@ const deleteAllTasks = async () => {
           ? err.response.data.detail
           : JSON.stringify(err.response.data);
 
-      response_delete_all_tasks.value.message = `❌ Erreur API (${err.response.status}) : ${detail}`;
+      response_delete_all_tasks.value.message =
+        `❌ Erreur API (${err.response.status}) : ${detail}`;
     } else if (err.request) {
       response_delete_all_tasks.value.message =
         "❌ Erreur réseau — impossible de contacter le serveur.";
     } else {
-      response_delete_all_tasks.value.message = `❌ Erreur inattendue : ${err.message}`;
+      response_delete_all_tasks.value.message =
+        `❌ Erreur inattendue : ${err.message}`;
     }
   }
 };
+
 
 
 

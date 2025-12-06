@@ -40,8 +40,8 @@ Content-Type: application/json
 
 {   "title": "Servir table",
     "content": "Servir table 3 ",
-    "author_id": "eb64efe3-4708-4bbc-bcc1-a8d686cb40e5",
-    "recipient_id": "fcd2dac9-ad84-4408-a97c-d96ffde30b99" }
+    "author_id": "3a9df022-37ec-43cd-a9ae-e6889dea29de",
+    "recipient_id": "88f54a66-e98d-4d91-9758-16aae405391c" }
 
 
 

@@ -98,7 +98,6 @@ Backend : [localhost:5001](http://localhost:5001/)
 
 
 ## Guide developpeur
-
 Ce projet est une application **Full Stack** conteneurisée, conçue autour d'une architecture modulaire séparant le frontend, le backend et la persistance des données.
 
 
@@ -139,9 +138,8 @@ sous l'architecture suivante :
 
 
 
+
 ## Fonctionnement des différentes dépendances
-
-
 ### Base de données
 Cette application est conçue pour la **gestion des tâches dans un restaurant**.  
 La base de données est organisée en deux tables principales : **Employee** et **Task**.
@@ -205,7 +203,8 @@ En résumé, ce module garantit une connexion fiable, sécurisée et adaptable �
 
 
 
-## api
+
+## API
 ### Architecture Technique
 Cette API REST a été développée avec **FastAPI** afin de fournir une architecture **robuste, sécurisée et extensible** pour la gestion d’un restaurant.  
 Elle expose plusieurs fonctionnalités essentielles :
@@ -286,6 +285,7 @@ Utilisé pour valider toutes les données entrantes (schémas).
 
 
 
+
 ## Tests
 La fiabilité de l’application est assurée par une **suite de tests automatisés** rigoureuse utilisant **Pytest**.  
 L’environnement de test est entièrement **conteneurisé avec Docker**, garantissant une exécution dans un contexte identique à la production.
@@ -324,4 +324,81 @@ avec une séparation claire entre la **logique métier** et l’**interface API*
 En résumé, cette stratégie de test garantit une application **robuste, stable et conforme** aux scénarios réels de production.
 
 
+
+
+
+
+🎨 Frontend – Interface utilisateur
+
+
+
+
+
+👥 Onglet “Employés”
+
+
+
+📋 Onglet “Tâches”
+
+L’onglet tâches offre une suite complète d’outils pour gérer le système d’assignation :
+
+création de tâches (auteur + destinataire)
+
+affichage global des tâches avec détails enrichis (nom, rôle, dates, relations)
+
+recherche de tâches par auteur
+
+recherche de tâches par destinataire
+
+suppression d’une tâche spécifique
+
+suppression de toutes les tâches (réservée au Chief_of_resto avec validation du token/ID)
+La mise en page a été pensée pour afficher un grand volume d’informations de manière structurée, tout en restant lisible.
+
+
 ## Frontend
+L’interface du frontend a été conçue pour être simple, intuitive et directement connectée à l’API FastAPI.
+Elle permet de tester visuellement toutes les fonctionnalités backend sans passer par des outils externes comme Postman ou Insomnia.
+
+### Page d'acceuil
+Une page d’accueil épurée offrant un aperçu global du projet, facilitant la navigation vers les sections Employés et Tâches.
+Elle sert d’introduction à l’interface et permet de rapidement comprendre le fonctionnement du système.
+<p align="center">
+  <img src="app/assets/accueil.png" alt="Double relation entre les tables" width="70%">
+</p>
+
+
+### Section employé
+<p align="center">
+  <img src="app/assets/onglet_employé.png" alt="Double relation entre les tables" width="70%">
+</p>
+Cette interface regroupe toutes les opérations liées à la gestion du personnel :
+-   création d’un employé
+-   recherche par ID
+-   suppression individuelle ou suppression globale (avec contrôle du rôle)
+-   listing complet des employés
+-   génération et vérification du token d’authentification
+
+Chaque action est affichée sous forme de cartes indépendantes, permettant de visualiser les retours d’API en temps réel.
+
+
+
+### Section Task
+<p align="center">
+  <img src="app/assets/onglet_tache.png" alt="Double relation entre les tables" width="70%">
+</p>
+
+L’onglet tâches offre une suite complète d’outils pour gérer le système d’assignation :
+-   création de tâches (auteur + destinataire)
+-   affichage global des tâches avec détails enrichis (nom, rôle, dates, relations)
+-   recherche de tâches par auteur
+-   recherche de tâches par destinataire
+-   suppression d’une tâche spécifique
+-   suppression de toutes les tâches (réservée au Chief_of_resto avec validation du token/ID)
+
+La mise en page a été pensée pour afficher un grand volume d’informations de manière structurée, tout en restant lisible.
+
+Decouvrez les autres onglets en explorant l'interface !
+
+
+

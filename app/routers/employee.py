@@ -90,7 +90,7 @@ async def delete_all_employee(
             )
 
         deleted_employees = employee_service.delete_all_employees(employee_id=employee_id, db=db)
-        return {"message": f"Deleted {len(deleted_employees)} employees successfully"}
+        return {"message": f"Deleted {len(deleted_employees) - 1} employees successfully"}
 
     except IncorrectRole:
         raise HTTPException(status_code=403, detail="Only the Chief of resto can delete the users")

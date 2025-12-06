@@ -22,8 +22,8 @@
 
       <div class="team-info">
         <h2> Membres de l'Équipe</h2>
-        <p><strong>Étudiant :</strong> John Doe</p>
-        <p><strong>Professeur :</strong> John Doe</p>
+        <p><strong>Étudiant :</strong> Cyrille KOUMA | Franck NGUIMKEU ZAFACK </p>
+        <p><strong>Professeur :</strong> Morgan Courivaud</p>
       </div>
 
       ---
