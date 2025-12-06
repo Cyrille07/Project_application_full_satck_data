@@ -3,7 +3,7 @@
 
 ## Introduction
 
-Dans le cadre du module **E5_DSIA_4201C - Application Full Stack Data**, nous avons eu l’opportunité de mettre en pratique les concepts étudiés en cours à travers la réalisation d’un projet complet.  
+Dans le cadre du module **E5_DSIA - Application Full Stack Data**, nous avons eu l’opportunité de mettre en pratique les concepts étudiés en cours à travers la réalisation d’un projet complet.  
 Ce projet consistait à **développer une application Web API**, **concevoir une base de données relationnelle** stockée dans **PostgreSQL**, créér un service de **tests automatisés avec Pytest** afin de valider la logique métier et les différentes routes implémentées, , le tout **conteneurisé avec Docker**. 
 En bonus, nous avons conçu un **Front end web interactive** permettant d’afficher et de manipuler les informations de manière optimale.
 
@@ -58,7 +58,6 @@ Nous avons orienté notre application Full Stack afin de :
 - [3. Tests](#tests)  
 - [4. Frontend](#frontend)  
 
-### IV. [Conclusion](#conclusion)
 ---
 
 
@@ -207,6 +206,83 @@ En résumé, ce module garantit une connexion fiable, sécurisée et adaptable �
 
 
 ## api
+### Architecture Technique
+Cette API REST a été développée avec **FastAPI** afin de fournir une architecture **robuste, sécurisée et extensible** pour la gestion d’un restaurant.  
+Elle expose plusieurs fonctionnalités essentielles :
+
+-  Gestion des employés (création, mise à jour, suppression, authentification)
+-  Gestion des tâches assignées aux employés
+-  Contrôle des actions critiques via un système de rôles  
+-  Authentification sécurisée via token JWT
+
+L’application repose sur une architecture modulaire organisée en trois couches principales, garantissant une bonne séparation des responsabilités et une maintenance facilitée.
+
+
+### Routes (Routers)
+Chaque ressource possède son propre routeur :
+
+| Route | Description |
+|-------|-------------|
+| `/auth` | Génération et validation des tokens JWT |
+| `/employees` | CRUD employés |
+| `/tasks` | CRUD tâches + filtrage par auteur/destinataire |
+
+Les routes sont volontairement légères :  
+Elles délèguent toute la logique métier aux **services**.
+
+
+### Services (Business Logic)
+La couche *services* encapsule l'intégralité de la logique métier :
+
+- Validation des rôles autorisés
+- Vérification de l’existence des employés
+- Gestion des permissions (ex. : seul l’auteur peut supprimer sa tâche)
+- Hashing sécurisé des mots de passe
+- Interactions directes avec la base via SQLAlchemy ORM
+
+Cette architecture permet de réaliser :
+
+- Tests unitaires sur les services  
+- Tests d’intégration via la base de données  
+- Tests de routes (API)
+
+
+### Authentification & Sécurité
+
+L’API repose sur un système **JWT** :
+
+1. L’utilisateur s’authentifie via `/auth/token`.
+2. Le système génère un **access_token** signé.
+3. Le token est vérifié à chaque requête protégée.
+4. L’identifiant de l’employé (`employee_id`) est automatiquement extrait grâce à `get_employee_id`.
+
+
+### Permissions par rôle :
+
+| Action | Rôle Requis |
+|--------|-------------|
+| Création d’un employé | Aucun |
+| Mise à jour de son profil | Authentifié |
+| Création d’une tâche | Employé authentifié |
+| Suppression d’une tâche | Auteur uniquement |
+| Suppression de toutes les tâches | **Chief_of_resto uniquement** |
+| Suppression de toutes les employés | **Chief_of_resto uniquement** |
+
+---
+
+### Validation & Gestion des Erreurs
+
+### Pydantic  
+Utilisé pour valider toutes les données entrantes (schémas).
+
+### Exceptions personnalisées
+
+- `EmployeeNotFound`
+- `TaskNotFound`
+- `IncorrectRole`
+- `WrongAuthor`
+
+
 
 
 
@@ -248,4 +324,4 @@ avec une séparation claire entre la **logique métier** et l’**interface API*
 En résumé, cette stratégie de test garantit une application **robuste, stable et conforme** aux scénarios réels de production.
 
 
-
+## Frontend
