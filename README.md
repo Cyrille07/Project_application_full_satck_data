@@ -45,10 +45,12 @@ Nous avons orienté notre application Full Stack afin de :
 
 ### I. [Guide Utilisateur](#guide-utilisateur)
 - [1. Installation et fonctionnement](#installation-et-fonctionnement)  
-- [2. Famework](#Framework)  
+
 
 ### II. [Guide Développeur](#guide-développeur)
 - [1. Répertoires et fichiers](#répertoires-et-fichiers)  
+- [2. Description des éléments principaux](#description-des-éléments-principaux)
+- [3. Famework](#Framework)  
 
 ### III. [Fonctionnement des différentes dépendances](#fonctionnement-des-différentes-dépendances)
 - [1. API](#api)  
@@ -90,12 +92,19 @@ Backend : [localhost:5001](http://localhost:5001/)
 
 
 
-## Framework 
+
+
+
+
+
+
+## Guide developpeur
+
 Ce projet est une application **Full Stack** conteneurisée, conçue autour d'une architecture modulaire séparant le frontend, le backend et la persistance des données.
 
 
-### Organisation des fichiers
-![arborescence](app/assets/arborescence.png)
+### Répertoires et fichiers
+<img src="app/assets/arborescence.png" alt="Structure de la base de données" width="60%">
 
 ###  Description des éléments principaux
 
@@ -114,7 +123,7 @@ Ce projet est une application **Full Stack** conteneurisée, conçue autour d'un
 
 ---
 
-### Architecture Globale
+### Framework 
 
 L'application repose sur 4 services principaux orchestrés par **Docker Compose** :
 
@@ -123,7 +132,9 @@ L'application repose sur 4 services principaux orchestrés par **Docker Compose*
 3.  **Database (PostgreSQL)** : Persistance des données relationnelles.
 4. **test (pytest)**:test des logiques métiers et des routes 
 
-sous l'architecture suivante : ![architecture](app/assets/architecture.png)
+sous l'architecture suivante :  
+<img src="app/assets/architecture.png" alt="Structure de la base de données" width="60%">
+
 
 
 
