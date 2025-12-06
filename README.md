@@ -164,6 +164,7 @@ Les rôles disponibles sont :
 - **Cook** → cuisinier  
 - **Cashier** → caissier  
 
+
 #### Table **Task**
 Cette table représente les **tâches attribuées aux employés**.  
 Chaque enregistrement contient :
@@ -181,8 +182,9 @@ Cette double relation entre les tables est essentielle : elle permet d’identif
   <img src="app/assets/double_relation.png" alt="Double relation entre les tables" width="80%">
 </p>
 
-#### Connexion à la base de données
 
+
+#### Connexion à la base de données
 La connexion à la base de données s’effectue via le fichier **`database.py`**.  
 Les informations de connexion sont définies dans le fichier **`.env`** sous forme de variables d’environnement :  
 `POSTGRES_USER`, `POSTGRES_PASSWORD` et `POSTGRES_DB`.  
@@ -191,39 +193,59 @@ Les informations de connexion sont définies dans le fichier **`.env`** sous for
 `DATABASE_URL=postgresql://master_user:**password**@database_container:5432/dbesiee_3`
 
 
+Le moteur **SQLAlchemy** gère les connexions et les transactions avec PostgreSQL.  
+La **session factory** permet de contrôler les transactions manuellement pour plus de fiabilité.  
+La classe **`declarative_base()`** centralise les modèles et les métadonnées de la base.  
 
-#### Étapes de configuration dans `database.py`
-1. **Chargement des variables d’environnement**  
-   L’URL de connexion est récupérée avec `os.getenv()`, ce qui rend la configuration flexible selon l’environnement (développement, test ou production).  
-   Le format de l’URL suit la convention standard :  
-   `postgresql://user:password@host:port/database`
-
-2. **Création du moteur SQLAlchemy**  
-   Le moteur est initialisé par la fonction `create_engine()`.  
-   Il gère les connexions et la communication entre l’application et PostgreSQL.
-
-3. **Configuration de la “session factory”**  
-   La fonction `sessionmaker()` définit la manière dont les sessions sont gérées.  
-   - `autocommit=False` permet de valider les transactions manuellement.  
-   - `autoflush=False` donne un contrôle total sur la synchronisation des modifications.  
-
-   Cette configuration assure une **meilleure maîtrise des transactions** et une **isolation claire** des requêtes.
-
-4. **Définition de la classe de base**  
-   La fonction `declarative_base()` crée la classe parente de tous les modèles SQLAlchemy.  
-   Elle centralise les **métadonnées** et permet la **création automatique des tables**.
-
-5. **Gestionnaire de dépendance FastAPI**  
-   La fonction `get_db()` met en place le système de dépendance utilisé dans FastAPI :  
-   - Une **nouvelle session** est créée pour chaque requête.  
-   - La **fermeture automatique** de la session est assurée par un bloc `finally`.  
-   - Ce mécanisme facilite l’**injection de dépendance** dans les routes FastAPI.
-
+Enfin, la fonction **`get_db()`** crée une session par requête et en assure la fermeture automatique,  
+permettant ainsi l’injection de dépendances dans les routes **FastAPI**.
 
 En résumé, ce module garantit une connexion fiable, sécurisée et adaptable à tout environnement d’exécution, tout en assurant une gestion optimale des sessions et des transactions.
 
 
+
+
+
 ## api
+
+
+
+## Tests
+La fiabilité de l’application est assurée par une **suite de tests automatisés** rigoureuse utilisant **Pytest**.  
+L’environnement de test est entièrement **conteneurisé avec Docker**, garantissant une exécution dans un contexte identique à la production.
+
+
+### Performances & Métriques
+- **Couverture de code** : 96 % (globale)  
+- **Nombre de tests** : plus de 70 tests automatisés  
+- **Temps d’exécution moyen** : environ 1 minute (via Docker)  
+- **Résultats** : validation des *happy paths* (cas nominaux) et des *edge cases* (erreurs 404, 403, 409, validations, etc.)
+
+
+### Stratégie & Architecture des Tests
+L’architecture des tests reprend celle de l’application (*mirror architecture*),  
+avec une séparation claire entre la **logique métier** et l’**interface API**.
+
+
+### Détails Techniques
+#### Isolation de la base de données
+- Utilisation de **fixtures Pytest** définies dans `conftest.py`.  
+- Chaque session de test initialise une base **PostgreSQL dédiée** (ou **SQLite in-memory**).  
+- Les tables sont créées puis supprimées (`drop_all`) à la fin de chaque session, garantissant des tests indépendants.
+
+#### Tests unitaires (`services_crud`)
+- Vérifient les **fonctions Python pures** interagissant avec SQLAlchemy.  
+- Contrôlent les **exceptions métier** (`EmployeeNotFound`, `TaskAlreadyExists`, `IncorrectRole`).  
+- Valident les **contraintes d’intégrité** (ex. : impossibilité de créer une tâche pour un employé inexistant).
+
+#### Tests d’intégration (`routers`)
+- Utilisent **`TestClient`** de FastAPI pour simuler de vraies requêtes HTTP.  
+- Vérifient les **codes de statut HTTP** : `200`, `201`, `401`, `403`, `404`.  
+- Exploitent la technique **Dependency Override** de FastAPI pour simuler différents rôles utilisateurs  
+  (*Chef*, *Serveur*, *Cuisinier*) sans avoir à générer de vrais tokens à chaque requête.
+
+
+En résumé, cette stratégie de test garantit une application **robuste, stable et conforme** aux scénarios réels de production.
 
 
 
