@@ -399,6 +399,7 @@ L’onglet tâches offre une suite complète d’outils pour gérer le système 
 La mise en page a été pensée pour afficher un grand volume d’informations de manière structurée, tout en restant lisible.
 
 Decouvrez les autres onglets en explorant l'interface !
+Pour remplir la databas si besoin , un fichier request.http est présent dans app/routers/
 
 
 
